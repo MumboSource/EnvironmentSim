@@ -3,6 +3,8 @@ import java.awt.Color;
 
 public class Entity {
     public Vector2D position;
+    public float wanderDir;
+    public float wanderSpeed;
 
     public int hunger;
     public int thirst;
@@ -19,7 +21,7 @@ public class Entity {
         hunger = 100;
         thirst = 100;
         generation = 1;
-        speed = 10;
+        speed = 1;
         color = new Color(0, 0, 0);
     }
 
@@ -29,7 +31,7 @@ public class Entity {
         thirst = 100;
         
         generation = 1;
-        speed = 10;
+        speed = 1;
         color = new Color(0, 0, 0);
     } 
 
@@ -37,15 +39,14 @@ public class Entity {
         if (other.predatorScore > predatorScore + (predatorScore / 4)){
             // Get eaten
         } else if (other.thirst < 50 && other.hunger < 50 && (Math.random() < 0.3)) {
-            // Breed
+            // Breed (freaky style)
         } else {
             // Fight
         }
     }
 
     public void display(Draw canvas) {
-        // NOT WORKING IDK WHY
         canvas.setPenColor(color);
-        canvas.circle(position.x, position.y, 0.05);
+        canvas.filledCircle(position.x / 1000.0 + 0.5, position.y / 1000.0 + 0.5, 0.01);
     }
 }
