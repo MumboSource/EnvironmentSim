@@ -21,7 +21,27 @@ public class Simulator implements DrawListener {
         canvas.clear();
         for (Entity entity : entities) {
 
-            if (entity.thirst > entity.hunger && entity.thirst > 50) {
+            Entity closestEntity = null;
+            double closestDistance = 0;
+            for(Entity other : entities) {
+                if(other != entity) {
+                    double distance = entity.position.magnitude(other.position);
+                    if(closestEntity == null || distance < closestDistance) {
+                        closestEntity = other;
+                        closestDistance = distance;
+                    }
+                }
+            }
+        if (closestDistance < 10){
+            if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)){
+                entities.remove(entity);
+                closestEntity.hunger = 100;
+            } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && (Math.random() < 0.3)) {
+               entities.add(new Entity(closestEntity, entity));
+            } else {
+                
+            }
+        }else if (entity.thirst > entity.hunger && entity.thirst > 50) {
 
                 // Move to water
 
@@ -43,6 +63,12 @@ public class Simulator implements DrawListener {
                     entity.position.x += entity.speed;
                 } else if(entity.position.x > nearestWater.x) {
                     entity.position.x -= entity.speed;
+                }
+
+                if(entity.position.y < nearestWater.y) {
+                    entity.position.y += entity.speed;
+                } else if(entity.position.y > nearestWater.y) {
+                    entity.position.y -= entity.speed;
                 }
 
             } else if(entity.hunger > entity.thirst && entity.hunger > 50) {

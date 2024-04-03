@@ -28,7 +28,7 @@ public class Entity {
         color = new Color(0, 0, 0);
     }
 
-    public Entity(int generation, Entity parent1, Entity parent2) {
+    public Entity(Entity parent1, Entity parent2) {
         position = new Vector2D(0, 0);
         hunger = 100;
         thirst = 100;
