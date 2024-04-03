@@ -24,9 +24,9 @@ public class Entity {
 
     public Entity(){
         position = new Vector2D(0, 0);
-        hunger = 100;
+        hunger = 0;
         hungerIncrease = 0.5;
-        thirst = 100;
+        thirst = 0;
         thirstIncrease = 0.5;
         freakyness = 0;
         freakynessIncrease = 0.5;
@@ -37,9 +37,9 @@ public class Entity {
 
     public Entity(Entity parent1, Entity parent2) {
         position = new Vector2D(0, 0);
-        hunger = 100;
+        hunger = 0;
         hungerIncrease = 0.5;
-        thirst = 100;
+        thirst = 0;
         thirstIncrease = 0.5;
         freakyness = 0;
         freakynessIncrease = 0.5;
@@ -89,18 +89,6 @@ public class Entity {
 
         // Mix parent colors?
         color = new Color(0, 0, 0);
-    } 
-
-    public void meetOther(Entity other) {
-        System.out.println(this + " met: " + other);
-
-        if (other.predatorScore > predatorScore + (predatorScore / 4)){
-            // Get eaten
-        } else if (other.thirst < 50 && other.hunger < 50 && (Math.random() < 0.3)) {
-            // Breed (freaky style)
-        } else {
-            // Fight
-        }
     }
 
     public void display(Draw canvas) {

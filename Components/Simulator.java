@@ -39,15 +39,13 @@ public class Simulator implements DrawListener {
             if (closestDistance < 10) {
                 if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)){
                     entities.remove(entity);
-                    closestEntity.hunger = 100;
+                    closestEntity.hunger = 0;
                     foundAction = true;
                 } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && entity.freakyness > 50 && closestEntity.freakyness > 50 && (Math.random() < 0.3)) {
                     entities.add(new Entity(closestEntity, entity));
                     entity.freakyness = 0;
                     closestEntity.freakyness = 0;
                     foundAction = true;
-                } else {
-                    
                 }
             }
             if (!foundAction && entity.thirst > entity.hunger && entity.thirst > 50) {
@@ -83,9 +81,7 @@ public class Simulator implements DrawListener {
                     }
                 }
 
-            } 
-            // We do the eating in the first if statement no?
-            /*else if (entity.hunger > entity.thirst && entity.hunger > 50) {
+            }else if (entity.hunger > entity.thirst && entity.hunger > 50) {
 
                 // Move to nearest entity with predatorScore thats less by 25%
                 Entity nearestPrey = null;
@@ -103,7 +99,34 @@ public class Simulator implements DrawListener {
                 if (nearestPrey != null) {
                     // Move to nearest prey
                 }
-            } */
+            }else if(entity.freakyness > 60){
+                    
+                    Entity nearestFreak = null;
+                    int nearestFreakDistance = 0;
+    
+                    for(Entity other : entities) {
+                        if(other != entity && other.freakyness > 55) {
+                            if(nearestFreak == null || entity.position.magnitude(other.position) < nearestFreakDistance) {
+                                nearestFreak = other;
+                                nearestFreakDistance = entity.position.magnitude(other.position);
+                            }
+                        }
+                    }
+    
+                    if (nearestFreak != null) {
+                        if(entity.position.x < nearestFreak.position.x) {
+                            entity.position.x += entity.speed;
+                        } else if(entity.position.x > nearestFreak.position.x) {
+                            entity.position.x -= entity.speed;
+                        }
+
+                        if(entity.position.y < nearestFreak.position.y) {
+                            entity.position.y += entity.speed;
+                        } else if(entity.position.y > nearestFreak.position.y) {
+                            entity.position.y -= entity.speed;
+                        }
+                    }
+            }
             if (!foundAction) {
                 // wander
                 entity.wanderDir += (Math.random() - 0.5) * 0.2;
@@ -118,6 +141,11 @@ public class Simulator implements DrawListener {
             entity.thirst += entity.thirstIncrease;
             entity.hunger += entity.hungerIncrease;
             entity.freakyness += entity.freakynessIncrease;
+
+            if(entity.thirst == 100 || entity.hunger == 100) {
+                entities.remove(entity);
+                continue;
+            }
 
             entity.display(canvas);
         }
