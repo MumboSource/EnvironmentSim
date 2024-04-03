@@ -32,16 +32,25 @@ public class Simulator implements DrawListener {
                     }
                 }
             }
-        if (closestDistance < 10){
-            if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)){
-                entities.remove(entity);
-                closestEntity.hunger = 100;
-            } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && (Math.random() < 0.3)) {
-               entities.add(new Entity(closestEntity, entity));
-            } else {
-                
+            
+            // if theres a close enemy and they are not hungry or freaky enough they wont consider the other actions, use this to fix it
+            boolean foundAction = false;
+
+            if (closestDistance < 10) {
+                if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)){
+                    entities.remove(entity);
+                    closestEntity.hunger = 100;
+                    foundAction = true;
+                } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && entity.freakyness > 50 && closestEntity.freakyness > 50 && (Math.random() < 0.3)) {
+                    entities.add(new Entity(closestEntity, entity));
+                    entity.freakyness = 0;
+                    closestEntity.freakyness = 0;
+                    foundAction = true;
+                } else {
+                    
+                }
             }
-        }else if (entity.thirst > entity.hunger && entity.thirst > 50) {
+            if (!foundAction && entity.thirst > entity.hunger && entity.thirst > 50) {
 
                 // Move to water
 
@@ -55,23 +64,28 @@ public class Simulator implements DrawListener {
                     }
                 }
 
-                if(nearestWater == null){
-                    continue;
+                if (nearestWater != null) {
+                    if(entity.position.x < nearestWater.x) {
+                        entity.position.x += entity.speed;
+                    } else if(entity.position.x > nearestWater.x) {
+                        entity.position.x -= entity.speed;
+                    }
+
+                    if(entity.position.y < nearestWater.y) {
+                        entity.position.y += entity.speed;
+                    } else if(entity.position.y > nearestWater.y) {
+                        entity.position.y -= entity.speed;
+                    }
+
+                    if (nearestWaterDistance < 10) {
+                        entity.thirst = 0;
+                        foundAction = true;
+                    }
                 }
 
-                if(entity.position.x < nearestWater.x) {
-                    entity.position.x += entity.speed;
-                } else if(entity.position.x > nearestWater.x) {
-                    entity.position.x -= entity.speed;
-                }
-
-                if(entity.position.y < nearestWater.y) {
-                    entity.position.y += entity.speed;
-                } else if(entity.position.y > nearestWater.y) {
-                    entity.position.y -= entity.speed;
-                }
-
-            } else if(entity.hunger > entity.thirst && entity.hunger > 50) {
+            } 
+            // We do the eating in the first if statement no?
+            /*else if (entity.hunger > entity.thirst && entity.hunger > 50) {
 
                 // Move to nearest entity with predatorScore thats less by 25%
                 Entity nearestPrey = null;
@@ -89,19 +103,9 @@ public class Simulator implements DrawListener {
                 if (nearestPrey != null) {
                     // Move to nearest prey
                 }
-            } else {
-                // Meet
-                for (Entity other : entities) {
-                    if (entity == other) continue;
-
-                    if (entity.position.magnitude(other.position) < 20) {
-                        entity.meetOther(other);
-                    }
-                }
-
-                // Wander
-                // Change direction and speed by a small random ammount
-
+            } */
+            if (!foundAction) {
+                // wander
                 entity.wanderDir += (Math.random() - 0.5) * 0.2;
                 entity.wanderSpeed += (Math.random() - 0.5) * 0.75;
 
@@ -111,8 +115,9 @@ public class Simulator implements DrawListener {
                 entity.position.y += Math.sin(entity.wanderDir) * entity.wanderSpeed;
             }
             
-            entity.thirst += 0.5;
-            entity.hunger += 0.5;
+            entity.thirst += entity.thirstIncrease;
+            entity.hunger += entity.hungerIncrease;
+            entity.freakyness += entity.freakynessIncrease;
 
             entity.display(canvas);
         }

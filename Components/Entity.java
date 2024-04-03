@@ -12,6 +12,9 @@ public class Entity {
     public double thirst;
     public double thirstIncrease;
 
+    public double freakyness;
+    public double freakynessIncrease;
+
     public int generation;
 
     public int speed;
@@ -22,7 +25,11 @@ public class Entity {
     public Entity(){
         position = new Vector2D(0, 0);
         hunger = 100;
+        hungerIncrease = 0.5;
         thirst = 100;
+        thirstIncrease = 0.5;
+        freakyness = 0;
+        freakynessIncrease = 0.5;
         generation = 1;
         speed = 1;
         color = new Color(0, 0, 0);
@@ -31,7 +38,11 @@ public class Entity {
     public Entity(Entity parent1, Entity parent2) {
         position = new Vector2D(0, 0);
         hunger = 100;
+        hungerIncrease = 0.5;
         thirst = 100;
+        thirstIncrease = 0.5;
+        freakyness = 0;
+        freakynessIncrease = 0.5;
         
         generation = parent1.generation + 1;
         speed = (parent1.speed + parent2.speed) / 2;
