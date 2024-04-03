@@ -6,6 +6,7 @@ public class Simulator implements DrawListener {
     private Draw canvas;
 
     private ArrayList<Entity> entities = new ArrayList<Entity>();
+    private ArrayList<Vector2D> waterSources = new ArrayList<Vector2D>();
 
     public Simulator(Draw canvas) {
         this.canvas = canvas;
@@ -20,10 +21,32 @@ public class Simulator implements DrawListener {
         canvas.clear();
         for (Entity entity : entities) {
 
-            if (entity.thirst > entity.hunger && entity.thirst > 50) {
+            if (/* The nearest entity is with 10 pixels */){
+                // Meet
+            }else if (entity.thirst > entity.hunger && entity.thirst > 50) {
 
                 // Move to water
-                entity.position.x += entity.speed;
+
+                Vector2D nearestWater = null;
+                int nearestWaterDistance = 0;
+
+                for(Vector2D waterSource : waterSources) {
+                    if(nearestWater == null || entity.position.magnitude(waterSource) < nearestWaterDistance) {
+                        nearestWater = waterSource;
+                        nearestWaterDistance = entity.position.magnitude(waterSource);
+                    }
+                }
+
+                if(nearestWater == null){
+                    continue;
+                }
+
+                if(entity.position.x < nearestWater.x) {
+                    entity.position.x += entity.speed;
+                } else if(entity.position.x > nearestWater.x) {
+                    entity.position.x -= entity.speed;
+                }
+
             } else if(entity.hunger > entity.thirst && entity.hunger > 50) {
 
                 // Move to nearest entity with predatorScore thats less by 25%
@@ -59,6 +82,11 @@ public class Simulator implements DrawListener {
             entity.hunger += 0.5;
 
             entity.display(canvas);
+        }
+
+        for(Vector2D waterSource : waterSources) {
+            canvas.setPenColor(0, 0, 255);
+            canvas.filledCircle(waterSource.x / 1000.0 + 0.5, waterSource.y / 1000.0 + 0.5, 0.01);
         }
         canvas.show();
     }
