@@ -19,6 +19,13 @@ public class Vector2D {
         return new Vector2D(this.x - other.x, this.y - other.y);
     }
 
+    public int magnitude(Vector2D other){
+        int x = this.x - other.x;
+        int y = this.y - other.y;
+
+        return x * x + y * y;
+    }
+
     public String toString(){
         return "Vector(" + x + ", " + y + ")";
     }

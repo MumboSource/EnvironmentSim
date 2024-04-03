@@ -12,16 +12,36 @@ public class Entity {
     public int speed;
     public Color color;
 
-    public Entity() {
+    public int predatorScore;
+
+    public Entity(){
+        position = new Vector2D(0, 0);
+        hunger = 100;
+        thirst = 100;
+        generation = 1;
+        speed = 10;
+        color = new Color(0, 0, 0);
+    }
+
+    public Entity(int generation, Entity parent1, Entity parent2) {
         position = new Vector2D(0, 0);
         hunger = 100;
         thirst = 100;
         
-        // Not sure what this does, can we communicate through comments?
         generation = 1;
         speed = 10;
         color = new Color(0, 0, 0);
     } 
+
+    public void meetOther(Entity other) {
+        if (other.predatorScore > predatorScore + (predatorScore / 4)){
+            // Get eaten
+        } else if (other.thirst < 50 && other.hunger < 50 && (Math.random() < 0.3)) {
+            // Breed
+        } else {
+            // Fight
+        }
+    }
 
     public void display(Draw canvas) {
         // NOT WORKING IDK WHY
