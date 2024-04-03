@@ -22,7 +22,7 @@ public class Entity {
     public int speed;
     public Color color;
 
-    public int predatorScore;
+    public double predatorScore;
 
     public Entity(){
         position = new Vector2D(0, 0);
@@ -35,11 +35,12 @@ public class Entity {
         generation = 1;
         speed = 1;
         toKill = false;
+        predatorScore = 0;
         color = new Color(0, 0, 0);
     }
 
     public Entity(Entity parent1, Entity parent2) {
-        position = new Vector2D(0, 0);
+        position = parent1.position;
         hunger = 0;
         hungerIncrease = 0.5;
         thirst = 0;
@@ -49,50 +50,15 @@ public class Entity {
         toKill = false;
         
         generation = parent1.generation + 1;
-        speed = (parent1.speed + parent2.speed) / 2;
 
-
-        if(Math.random() < 0.5){
-            predatorScore = parent1.predatorScore;
-        } else {
-            predatorScore = parent2.predatorScore;
-        }
-
-        if(Math.random() > .2) { // Entity will mutate
-            predatorScore += (int) (Math.random() * 10) - 5;
-
-            // Maybe mutate speed only if its predatorScore is lower than the average?
-
-            if(Math.random() < 0.3) { // Mutate speed
-
-                if(Math.random() < 0.5) { // Increase speed
-                    speed += (int) (Math.random() * 2) + 1;
-                } else {// Decrease speed 
-                    speed -= (int) (Math.random() * 2) - 1;
-                }
-            }
-
-            if(Math.random() < 0.4) { // Mutate thirst capacity
-                if(Math.random() < 0.5) { // Thirstier
-                    thirstIncrease += Math.random();
-                } else {// Decrease thirst 
-                    thirst -= Math.random();
-                }
-            }
-
-            if(Math.random() < 0.4) { // Mutate hunger capacity
-                if(Math.random() < 0.5) { // Hungrier
-                    hungerIncrease += Math.random();
-                } else {// Decrease hunger 
-                    hunger -= Math.random();
-                }
-            }
-
-
-        }
+        predatorScore = (parent1.predatorScore+parent2.predatorScore)/2 + (Math.random()-0.5);
+        thirstIncrease = (parent1.thirstIncrease+parent2.thirstIncrease)/2 + (Math.random()-0.5);
+        hungerIncrease = (parent1.hungerIncrease+parent2.hungerIncrease)/2 + (Math.random()-0.5);
+        freakynessIncrease = (parent1.freakynessIncrease+parent2.freakynessIncrease)/2 + (Math.random()-0.5);
+        speed = (int) ((parent1.speed+parent2.speed)/2.0 + (Math.random()-0.5)*10);
 
         // Mix parent colors?
-        color = new Color(0, 0, 0);
+        color = parent1.color;
     }
 
     public void display(Draw canvas) {

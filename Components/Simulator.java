@@ -38,6 +38,7 @@ public class Simulator implements DrawListener {
             // if theres a close enemy and they are not hungry or freaky enough they wont consider the other actions, use this to fix it
             boolean foundAction = false;
 
+
             if (closestDistance < 10) {
                 if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)) {
                     System.out.println("I was eaten");
