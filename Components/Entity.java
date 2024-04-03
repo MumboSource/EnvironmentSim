@@ -6,6 +6,8 @@ public class Entity {
     public double wanderDir;
     public double wanderSpeed;
 
+    public boolean toKill;
+
     public double hunger;
     public double hungerIncrease;
 
@@ -32,6 +34,7 @@ public class Entity {
         freakynessIncrease = 0.5;
         generation = 1;
         speed = 1;
+        toKill = false;
         color = new Color(0, 0, 0);
     }
 
@@ -43,6 +46,7 @@ public class Entity {
         thirstIncrease = 0.5;
         freakyness = 0;
         freakynessIncrease = 0.5;
+        toKill = false;
         
         generation = parent1.generation + 1;
         speed = (parent1.speed + parent2.speed) / 2;
