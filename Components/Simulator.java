@@ -12,6 +12,12 @@ public class Simulator implements DrawListener {
 
     public Simulator(Draw canvas) {
         this.canvas = canvas;
+
+        for(int i = 0; i < 5; i++) {
+            Vector2D waterLocation = new Vector2D((int) Math.random() * 800, (int) Math.random() * 800);
+            
+            waterSources.add(waterLocation);
+        }
     }
 
     public void AddEntity(Entity entity) {
@@ -28,30 +34,30 @@ public class Simulator implements DrawListener {
             for(Entity other : entities) {
                 if (entity == other || other.toKill) continue;
 
-                double distance = entity.position.magnitude(other.position);
+                double distance = entity.position.distanceTo(other.position);
                 if(closestEntity == null || distance < closestDistance) {
                     closestEntity = other;
                     closestDistance = distance;
                 }
             }
             
-            // if theres a close enemy and they are not hungry or freaky enough they wont consider the other actions, use this to fix it
+            // if theres a close enemy and they are not hungry or matey enough they wont consider the other actions, use this to fix it
             boolean foundAction = false;
 
 
             if (closestDistance < 10) {
-                if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4)) {
+                if (closestEntity.predatorScore > entity.predatorScore + (entity.predatorScore / 4) && closestEntity.hunger > 50) {
                     System.out.println("I was eaten");
                     entity.toKill = true;
                     closestEntity.hunger = 0;
                     foundAction = true;
-                } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && entity.freakyness > 50 && closestEntity.freakyness > 50 && (Math.random() < 0.3)) {
-                    System.out.println("I got freaky");
+                } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && entity.matingScore > 50 && closestEntity.matingScore > 50 && (Math.random() < 0.3)) {
+                    System.out.println("I got matey");
 
                     matingPairs.add(new Entity[]{entity, closestEntity});
                     
-                    entity.freakyness = 0;
-                    closestEntity.freakyness = 0;
+                    entity.matingScore = 0;
+                    closestEntity.matingScore = 0;
                     foundAction = true;
                 }
             }
@@ -63,9 +69,9 @@ public class Simulator implements DrawListener {
                 int nearestWaterDistance = 0;
 
                 for(Vector2D waterSource : waterSources) {
-                    if(nearestWater == null || entity.position.magnitude(waterSource) < nearestWaterDistance) {
+                    if(nearestWater == null || entity.position.distanceTo(waterSource) < nearestWaterDistance) {
                         nearestWater = waterSource;
-                        nearestWaterDistance = entity.position.magnitude(waterSource);
+                        nearestWaterDistance = entity.position.distanceTo(waterSource);
                     }
                 }
 
@@ -100,9 +106,9 @@ public class Simulator implements DrawListener {
                     if (entity == other || other.toKill) continue;
 
                     if (other.predatorScore < entity.predatorScore - (entity.predatorScore / 4)) {
-                        if(nearestPrey == null || entity.position.magnitude(other.position) < nearestPreyDistance) {
+                        if(nearestPrey == null || entity.position.distanceTo(other.position) < nearestPreyDistance) {
                             nearestPrey = other;
-                            nearestPreyDistance = entity.position.magnitude(other.position);
+                            nearestPreyDistance = entity.position.distanceTo(other.position);
                         }
                     }
                 }
@@ -112,30 +118,30 @@ public class Simulator implements DrawListener {
                     foundAction = true;
                 }
             }
-            if (!foundAction && entity.freakyness > 60){                
-                Entity nearestFreak = null;
-                int nearestFreakDistance = Integer.MAX_VALUE;
+            if (!foundAction && entity.matingScore > 60){                
+                Entity nearestmate = null;
+                int nearestmateDistance = Integer.MAX_VALUE;
 
                 for(Entity other : entities) {
                     if (entity == other || other.toKill) continue;
-                    if (other.freakyness > 55) {
-                        if(nearestFreak == null || entity.position.magnitude(other.position) < nearestFreakDistance) {
-                            nearestFreak = other;
-                            nearestFreakDistance = entity.position.magnitude(other.position);
+                    if (other.matingScore > 55) {
+                        if(nearestmate == null || entity.position.distanceTo(other.position) < nearestmateDistance) {
+                            nearestmate = other;
+                            nearestmateDistance = entity.position.distanceTo(other.position);
                         }
                     }
                 }
 
-                if (nearestFreak != null) {
-                    if(entity.position.x < nearestFreak.position.x) {
+                if (nearestmate != null) {
+                    if(entity.position.x < nearestmate.position.x) {
                         entity.position.x += entity.speed;
-                    } else if(entity.position.x > nearestFreak.position.x) {
+                    } else if(entity.position.x > nearestmate.position.x) {
                         entity.position.x -= entity.speed;
                     }
 
-                    if(entity.position.y < nearestFreak.position.y) {
+                    if(entity.position.y < nearestmate.position.y) {
                         entity.position.y += entity.speed;
-                    } else if(entity.position.y > nearestFreak.position.y) {
+                    } else if(entity.position.y > nearestmate.position.y) {
                         entity.position.y -= entity.speed;
                     }
 
@@ -155,7 +161,7 @@ public class Simulator implements DrawListener {
             
             entity.thirst += entity.thirstIncrease;
             entity.hunger += entity.hungerIncrease;
-            entity.freakyness += entity.freakynessIncrease;
+            entity.matingScore += entity.matingScoreIncrease;
 
             if(entity.thirst == 100 || entity.hunger == 100) {
                 System.out.println("I starved/dehydrated");

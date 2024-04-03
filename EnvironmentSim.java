@@ -1,6 +1,9 @@
+import java.awt.Color;
+
 import Components.Draw;
 import Components.Entity;
 import Components.Simulator;
+import Components.Vector2D;
 
 public class EnvironmentSim {
     public static void main(String[] args) {
@@ -12,26 +15,35 @@ public class EnvironmentSim {
         canvas.addListener(listener);
         canvas.enableTimer(60);
 
-        Entity testPrey1 = new Entity();
-        Entity testPrey2 = new Entity();
+        for(int i = 0; i < 15; i++) {
+            Entity prey = new Entity();
 
-        
-        Entity testPreditor1 = new Entity();
-        Entity testPreditor2 = new Entity();
+            prey.position.x = (int) Math.random() * 800;
+            prey.position.y = (int) Math.random() * 800;
 
-        testPrey1.freakynessIncrease = 3;
-        testPrey2.freakynessIncrease = 3;
-        testPrey1.predatorScore = 0.1;
-        testPrey2.predatorScore = 0.1;
+            prey.matingScoreIncrease = .9;
+            prey.predatorScore = 0.1;
+            prey.hungerIncrease = 0.5;
 
-        testPreditor1.predatorScore = 3;
-        testPreditor2.predatorScore = 3;
-        testPreditor1.freakynessIncrease = 0.1;
-        testPreditor2.freakynessIncrease = 0.1;
+            prey.color = new Color(15, 255, 15);
 
-        listener.AddEntity(testPrey1);
-        listener.AddEntity(testPrey2);
-        listener.AddEntity(testPreditor1);
-        listener.AddEntity(testPreditor2);
+            listener.AddEntity(prey);
+        }
+
+        for(int i = 0; i < 5; i++) {
+            Entity predator = new Entity();
+
+            predator.position.x = (int) Math.random() * 800;
+            predator.position.y = (int) Math.random() * 800;
+
+            predator.predatorScore = 0.9;
+            predator.matingScoreIncrease = 0.1;
+            predator.hungerIncrease = 0.9;
+
+            predator.color = new Color(255, 15, 15);
+
+            listener.AddEntity(predator);
+        }
+
     }
 }
