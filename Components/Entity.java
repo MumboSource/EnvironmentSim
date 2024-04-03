@@ -27,9 +27,9 @@ public class Entity {
     public Entity(){
         position = new Vector2D(0, 0);
         hunger = 0;
-        hungerIncrease = 0.5;
+        hungerIncrease = 0;
         thirst = 0;
-        thirstIncrease = 0.5;
+        thirstIncrease = 0;
         freakyness = 0;
         freakynessIncrease = 0.5;
         generation = 1;

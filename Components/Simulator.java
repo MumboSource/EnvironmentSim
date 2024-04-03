@@ -7,6 +7,8 @@ public class Simulator implements DrawListener {
 
     private ArrayList<Entity> entities = new ArrayList<Entity>();
     private ArrayList<Vector2D> waterSources = new ArrayList<Vector2D>();
+    private ArrayList<Entity[]> matingPairs = new ArrayList<Entity[]>();
+
 
     public Simulator(Draw canvas) {
         this.canvas = canvas;
@@ -44,7 +46,9 @@ public class Simulator implements DrawListener {
                     foundAction = true;
                 } else if (closestEntity.thirst < 50 && closestEntity.hunger < 50 && entity.freakyness > 50 && closestEntity.freakyness > 50 && (Math.random() < 0.3)) {
                     System.out.println("I got freaky");
-                    entities.add(new Entity(closestEntity, entity));
+
+                    matingPairs.add(new Entity[]{entity, closestEntity});
+                    
                     entity.freakyness = 0;
                     closestEntity.freakyness = 0;
                     foundAction = true;
@@ -161,11 +165,20 @@ public class Simulator implements DrawListener {
             if (!entity.toKill) entity.display(canvas);
         }
 
+        for(Entity[] pair : matingPairs) {
+            Entity parent1 = pair[0];
+            Entity parent2 = pair[1];
+
+            Entity child = new Entity(parent1, parent2);
+            entities.add(child);
+        }
+        matingPairs.clear();
+
         for(Vector2D waterSource : waterSources) {
             canvas.setPenColor(0, 0, 255);
             canvas.filledCircle(waterSource.x / 1000.0 + 0.5, waterSource.y / 1000.0 + 0.5, 0.01);
         }
-        entities.removeIf(b -> b.toKill);
+        entities.removeIf(b -> b.toKill); // gas
         canvas.show();
     }
 }
