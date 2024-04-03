@@ -12,7 +12,9 @@ public class EnvironmentSim {
         canvas.addListener(listener);
         canvas.enableTimer(60);
 
+        Entity testGuy2 = new Entity();
         Entity testGuy = new Entity();
         listener.AddEntity(testGuy);
+        listener.AddEntity(testGuy2);
     }
 }

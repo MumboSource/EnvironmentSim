@@ -21,9 +21,7 @@ public class Simulator implements DrawListener {
         canvas.clear();
         for (Entity entity : entities) {
 
-            if (/* The nearest entity is with 10 pixels */){
-                // Meet
-            }else if (entity.thirst > entity.hunger && entity.thirst > 50) {
+            if (entity.thirst > entity.hunger && entity.thirst > 50) {
 
                 // Move to water
 
@@ -65,14 +63,23 @@ public class Simulator implements DrawListener {
                 if (nearestPrey != null) {
                     // Move to nearest prey
                 }
-            }else {
+            } else {
+                // Meet
+                for (Entity other : entities) {
+                    if (entity == other) continue;
+
+                    if (entity.position.magnitude(other.position) < 20) {
+                        entity.meetOther(other);
+                    }
+                }
+
                 // Wander
                 // Change direction and speed by a small random ammount
 
-                entity.wanderDir += (Math.random() - 0.5) * 0.5;
+                entity.wanderDir += (Math.random() - 0.5) * 0.2;
                 entity.wanderSpeed += (Math.random() - 0.5) * 0.75;
 
-                // made it so if they hit the wall change wander dir by 90 deg
+                if (entity.position.x > 500 || entity.position.x < -500 || entity.position.y > 500 || entity.position.y < -500) entity.wanderSpeed = -entity.wanderSpeed * 0.5;
 
                 entity.position.x += Math.cos(entity.wanderDir) * entity.wanderSpeed;
                 entity.position.y += Math.sin(entity.wanderDir) * entity.wanderSpeed;
