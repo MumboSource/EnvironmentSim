@@ -1,4 +1,5 @@
 import Components.Draw;
+import Components.Entity;
 import Components.Simulator;
 
 public class EnvironmentSim {
@@ -10,5 +11,8 @@ public class EnvironmentSim {
         canvas.enableDoubleBuffering();
         canvas.addListener(listener);
         canvas.enableTimer(60);
+
+        Entity testGuy = new Entity();
+        listener.AddEntity(testGuy);
     }
 }
