@@ -60,7 +60,7 @@ public class Entity {
         speed = (int) ((parent1.speed+parent2.speed)/2.0 + (Math.random()-0.5)*10);
 
         // Mix parent colors?
-        color = new Color(0,0,0);
+        color = new Color(parent1.color.getRGB());
     }
 
     public void display(Draw canvas) {

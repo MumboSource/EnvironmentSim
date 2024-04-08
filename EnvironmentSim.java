@@ -18,8 +18,8 @@ public class EnvironmentSim {
         for(int i = 0; i < 15; i++) {
             Entity prey = new Entity();
 
-            prey.position.x = (int) Math.random() * 800;
-            prey.position.y = (int) Math.random() * 800;
+            prey.position.x = (int) ((Math.random()-0.5) * 1000);
+            prey.position.y = (int) ((Math.random()-0.5) * 1000);
 
             prey.matingScoreIncrease = .9;
             prey.predatorScore = 0.1;
@@ -33,8 +33,8 @@ public class EnvironmentSim {
         for(int i = 0; i < 5; i++) {
             Entity predator = new Entity();
 
-            predator.position.x = (int) Math.random() * 800;
-            predator.position.y = (int) Math.random() * 800;
+            predator.position.x = (int) ((Math.random()-0.5) * 1000);
+            predator.position.y = (int) ((Math.random()-0.5) * 1000);
 
             predator.predatorScore = 0.9;
             predator.matingScoreIncrease = 0.1;
