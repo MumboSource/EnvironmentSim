@@ -11,6 +11,11 @@ public class Vector2D {
         this.y = y;
     }
 
+    public Vector2D(double x, double y) {
+        this.x = (int) x;
+        this.y = (int) y;
+    }
+
     public Vector2D add(Vector2D other){
         return new Vector2D(this.x + other.x, this.y + other.y);
     }
@@ -19,11 +24,24 @@ public class Vector2D {
         return new Vector2D(this.x - other.x, this.y - other.y);
     }
 
-    public int distanceTo(Vector2D other){
-        int x = this.x - other.x;
-        int y = this.y - other.y;
+    public Vector2D mul(Vector2D other) {
+        return new Vector2D(this.x * other.x, this.y * other.y);
+    }
+    public Vector2D mul(double scale) {
+        return new Vector2D(this.x * scale, this.y * scale);
+    }
 
-        return x * x + y * y;
+    public double magnitude() {
+        return Math.sqrt(this.x*this.x + this.y*this.y);
+    }
+
+    public Vector2D normalized() {
+        double fac = 1/this.magnitude();
+        return new Vector2D(this.x*fac, this.y*fac);
+    }
+
+    public double distanceTo(Vector2D other){
+        return this.subtract(other).magnitude();
     }
 
     public String toString(){

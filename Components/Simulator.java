@@ -66,7 +66,7 @@ public class Simulator implements DrawListener {
                 // Move to water
 
                 Vector2D nearestWater = null;
-                int nearestWaterDistance = 0;
+                double nearestWaterDistance = Double.MAX_VALUE;
 
                 for(Vector2D waterSource : waterSources) {
                     if(nearestWater == null || entity.position.distanceTo(waterSource) < nearestWaterDistance) {
@@ -76,17 +76,7 @@ public class Simulator implements DrawListener {
                 }
 
                 if (nearestWater != null) {
-                    if(entity.position.x < nearestWater.x) {
-                        entity.position.x += entity.speed;
-                    } else if(entity.position.x > nearestWater.x) {
-                        entity.position.x -= entity.speed;
-                    }
-
-                    if(entity.position.y < nearestWater.y) {
-                        entity.position.y += entity.speed;
-                    } else if(entity.position.y > nearestWater.y) {
-                        entity.position.y -= entity.speed;
-                    }
+                    entity.position = entity.position.add(nearestWater.subtract(entity.position)).normalized().mul(entity.speed);
 
                     if (nearestWaterDistance < 10) {
                         entity.thirst = 0;
@@ -100,7 +90,7 @@ public class Simulator implements DrawListener {
 
                 // Move to nearest entity with predatorScore thats less by 25%
                 Entity nearestPrey = null;
-                int nearestPreyDistance = Integer.MAX_VALUE;
+                double nearestPreyDistance = Double.MAX_VALUE;
 
                 for(Entity other : entities) {
                     if (entity == other || other.toKill) continue;
@@ -118,9 +108,9 @@ public class Simulator implements DrawListener {
                     foundAction = true;
                 }
             }
-            if (!foundAction && entity.matingScore > 60){                
+            if (!foundAction && entity.matingScore > 60) {            
                 Entity nearestmate = null;
-                int nearestmateDistance = Integer.MAX_VALUE;
+                double nearestmateDistance = Double.MAX_VALUE;
 
                 for(Entity other : entities) {
                     if (entity == other || other.toKill) continue;
