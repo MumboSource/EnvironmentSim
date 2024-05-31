@@ -5,6 +5,20 @@ import Components.Entity;
 import Components.Simulator;
 import Components.Vector2D;
 
+/*
+
+Suggested Extensions:
+
+Make color depend on the species stats.
+
+Make reproduction only happen if the colors are similar.
+
+Make water generate more abundantly and in groups.
+
+Fix the bug where one group of entities moves at a time.
+
+*/
+
 public class EnvironmentSim {
     public static void main(String[] args) {
         Draw canvas = new Draw();
